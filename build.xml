@@ -1,0 +1,57 @@
+<project name="symfony" default="analyze" basedir="./">
+    <property file="./build.properties.dist" />
+
+    <target name="composer" unless="composer.done">
+        <exec command="composer install" />
+        <property name="composer.done" value="true"/>
+    </target>
+
+    <target name="configure" unless="configure.done">
+        <copy file="app/config/parameters.yml.tpl" tofile="app/config/parameters.yml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="DATABASE_HOST" value="${env.database_host}" />
+                    <token key="DATABASE_PORT" value="${env.database_port}" />
+                    <token key="DATABASE_NAME" value="${env.database_name}" />
+                    <token key="DATABASE_USER" value="${env.database_user}" />
+                    <token key="DATABASE_PASSWORD" value="${env.database_password}" />
+                    <token key="MAILER_TRANSPORT" value="${env.mailer_transport}" />
+                    <token key="SMTP_HOST" value="${env.mailer_host}" />
+                    <token key="SMTP_PORT" value="${env.mailer_port}" />
+                    <token key="SMTP_USER" value="${env.mailer_user}" />
+                    <token key="SMTP_PASSWORD" value="${env.mailer_password}" />
+                    <token key="SECRET" value="${env.secret}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+        <property name="configure.done" value="true"/>
+    </target>
+
+    <target name="phpcs" unless="phpcs.done">
+        <exec executable="phpcs">
+            <arg path="--standard=PSR2" />
+            <arg path="--report=checkstyle" />
+            <arg value="--extensions=php" />
+            <arg path="src" />
+            <arg path=">" />
+            <arg path="phpcs.xml" />
+        </exec>
+        <property name="phpcs.done" value="true"/>
+    </target>
+
+    <target name="phpmd"
+            unless="phpmd.done"
+            description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="phpmd">
+            <arg path="src" />
+            <arg value="xml" />
+            <arg path="build/syberry-phpmd-1.0.xml" />
+            <arg value="--reportfile" />
+            <arg path="pmd.xml" />
+        </exec>
+        <property name="phpmd.done" value="true"/>
+    </target>
+
+    <target name="analyze" depends="phpcs,phpmd">
+    </target>
+</project>

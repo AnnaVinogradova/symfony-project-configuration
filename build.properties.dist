@@ -1,0 +1,12 @@
+env.database_host = 127.0.0.1
+env.database_port = null
+env.database_name = symfony
+env.database_user = root
+env.database_password = 123456
+env.mailer_transport = smtp
+env.mailer_host = 127.0.0.1
+env.mailer_port = null
+env.mailer_user = null
+env.mailer_password = null
+env.secret = 89cf35c6f250d84b63bc0v4e4f8ddfe2
+env.BUILD_NUMBER = 1

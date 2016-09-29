@@ -1,0 +1,13 @@
+{
+    "name": "phing",
+    "description": "Phing and code analysis install",
+    "require-dev": {
+        "phing/phing": "2.*",
+        "squizlabs/php_codesniffer": "*",
+        "pdepend/pdepend" : "2.1.0",
+        "phpmd/phpmd" : "@stable"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
